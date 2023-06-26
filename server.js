@@ -37,7 +37,7 @@ wss.on("message", async function (msg) {
         {
           role: "system",
           content:
-            "Only respond with a number from 1-100. Your role is to analyze real-time news data and provide me with a sentiment rating on a scale of 1 to 100. A rating of 1 should indicate highly negative news, while a rating of 100 should reflect highly positive news. Your primary function is to assist me in making well-informed trading decisions by analyzing the sentiment of the news surrounding the targeted companies",
+            "Only respond with a number from 1-100. Your role is to analyze real-time news data and provide me with a sentiment rating on a scale of 1 to 100. A rating of 1 should indicate to sell the stock, while a rating of 100 should be to buy the stock. Your primary function is to assist me in making well-informed trading decisions by analyzing the sentiment of the news surrounding the targeted companies",
         },
         {
           role: "user",
@@ -67,8 +67,9 @@ wss.on("message", async function (msg) {
       });
 
     const tradeSymbol = event.symbols[0];
+    // const tradeSymbol = "BIOL";
 
-    if (impact >= 60) {
+    if (impact >= 65) {
       let order = await alpaca.createOrder({
         symbol: tradeSymbol,
         qty: 1,
@@ -76,8 +77,13 @@ wss.on("message", async function (msg) {
         type: "market",
         time_in_force: "day",
       });
-    } else if (impact <= 30) {
-      let closed = alpaca.closePosition(tradeSymbol);
+    } else if (impact <= 45 && impact != 0) {
+      let positions = await alpaca.getPositions();
+      positions.map((position) => {
+        if (position.symbol === tradeSymbol) {
+          let closed = alpaca.closePosition(tradeSymbol);
+        }
+      });
     }
   }
 });
