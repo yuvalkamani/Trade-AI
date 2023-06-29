@@ -70,7 +70,7 @@ wss.on("message", async function (msg) {
       const tradeSymbol = event.symbols[0];
       // const tradeSymbol = "BIOL";
 
-      if (impact >= 65) {
+      if (impact >= 70) {
         let order = await alpaca.createOrder({
           symbol: tradeSymbol,
           qty: 1,
